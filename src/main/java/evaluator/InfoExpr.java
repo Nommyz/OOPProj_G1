@@ -22,12 +22,13 @@ public class InfoExpr implements Statement {
     }
 
     @Override
-    public String val() throws SyntaxError {
-        if (direction == null) {
-            return arg;
-        } else {
-            return arg + " " + direction;
-        }
+    public long evaluate() throws SyntaxError {
+       return 0;
+    }
+
+    @Override
+    public StringBuilder addCommand(StringBuilder s) {
+        return null;
     }
 
 

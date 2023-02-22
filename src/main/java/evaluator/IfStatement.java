@@ -24,7 +24,17 @@ public class IfStatement implements Statement{
     }
 
     @Override
-    public String val() throws SyntaxError {
-        return null;
+    public long evaluate() throws SyntaxError {
+        if (Expression().evaluate() > 0) {
+            trueState.evaluate();
+        } else {
+            falseState.evaluate();
+        }
+        return 0;
     }
+
+    @Override
+    public StringBuilder addCommand(StringBuilder s) {
+        s.append("Ifstatement ");
+        return  s;}
 }

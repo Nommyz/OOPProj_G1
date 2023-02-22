@@ -22,8 +22,14 @@ public class Expr implements Statement {
         return op;
     }
 
+
     @Override
-    public String val() throws SyntaxError {
-        return op;
+    public long evaluate() throws SyntaxError {
+        return 0;
+    }
+
+    @Override
+    public StringBuilder addCommand(StringBuilder s) {
+        return null;
     }
 }

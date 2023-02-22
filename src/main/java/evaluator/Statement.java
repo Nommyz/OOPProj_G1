@@ -1,5 +1,6 @@
 package evaluator;
 
 public interface Statement {
-    String val() throws SyntaxError;
+    long evaluate() throws SyntaxError;
+    StringBuilder addCommand(StringBuilder s);
 }

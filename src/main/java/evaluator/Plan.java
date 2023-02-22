@@ -19,7 +19,18 @@ public class Plan {
         return iterator.hasNext();
     }
 
-    public void resetIterator() {
+    public void setIterator() {
         iterator = listOfState.iterator();
+    }
+
+    public String evaluate() throws SyntaxError {
+        StringBuilder commandList = new StringBuilder();
+        setIterator();
+        while (hasNext()) {
+            Statement state = nextState();
+            state.evaluate();
+            commandList = state.addCommand(commandList);
+        }
+        return commandList.toString();
     }
 }

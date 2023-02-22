@@ -12,8 +12,13 @@ public class IntLit implements Statement {
     }
 
     @Override
-    public String val() throws SyntaxError {
-        return Integer.toString(val);
+    public long evaluate() throws SyntaxError {
+        return 0;
+    }
+
+    @Override
+    public StringBuilder addCommand(StringBuilder s) {
+        return null;
     }
 
 

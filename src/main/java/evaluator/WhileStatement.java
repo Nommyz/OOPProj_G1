@@ -9,17 +9,26 @@ public class WhileStatement implements Statement {
         this.trueState = trueState;
     }
 
-    public Statement getExpression() {
+    public Statement Expression() {
         return expression;
     }
 
     public Statement trueState() {
         return trueState;
     }
+
+
     @Override
-    public String val() throws SyntaxError {
-        return null;
+    public long evaluate() throws SyntaxError {
+        for (int counter = 0; counter < 10000 && Expression().evaluate() > 0; counter++){
+            trueState.evaluate();
+        }
+        return 0;
     }
 
-
+    @Override
+    public StringBuilder addCommand(StringBuilder s) {
+        s.append("Whilestatement ");
+        return s;
+    }
 }

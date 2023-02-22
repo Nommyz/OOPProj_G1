@@ -1,5 +1,7 @@
 package evaluator;
 
+import data.Unit;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -8,6 +10,7 @@ import java.util.Set;
 public class Parser {
     private Tokenizer token;
     private Plan plan;
+    Unit crew;
     private static final Set<String> reservedWords = new HashSet<>(Arrays.asList(
             "collect", "done", "invest", "opponent", "relocate",
             "down", "downleft", "downright",
@@ -15,10 +18,11 @@ public class Parser {
             "while", "else", "if", "shoot", "then", "move", "nearby"
     ));
 
-    public Plan parse(String stream) throws SyntaxError {
+    public String parse(String stream,Unit crew) throws SyntaxError {
         this.token = new Tokenizer(stream);
         plan = parsePlan();
-        return plan;
+        this.crew = crew;
+        return plan.evaluate();
     }
 
     private Plan parsePlan() throws SyntaxError {
@@ -53,14 +57,14 @@ public class Parser {
      * AssignmentStatement → <identifier> = Expression
      */
     private Statement parseAssignmentStatement() throws SyntaxError {
-        Statement identifier = parseIdentifier();
+        Identifier identifier = parseIdentifier();
         token.consume("=");
         Statement expression = parseExpression();
         return new AssignStatement(identifier, "=", expression);
     }
 
     /**
-     * ActionCommand → done | relocate | MoveCommand | RegionCommand | AttackCommand
+     * ActionCommand → done | relocate | MoveCommand(move) | RegionCommand | AttackCommand(shoot)
      * */
     private Statement parseActionCommand() throws SyntaxError {
         return switch (token.peek()) {
@@ -68,8 +72,15 @@ public class Parser {
             case "shoot" -> parseAttackCommand();
             case "invest" -> parseRegionCommand();
             case "collect" -> parseRegionCommand();
+            case "done" -> parseDoneCommand();
+            case "relocate" -> parseRelocateCommand();
             default -> throw new SyntaxError("Error");
         };
+
+    }
+    private Statement parseDoneCommand() throws SyntaxError {
+    }
+    private Statement parseRelocateCommand() throws SyntaxError {
 
     }
 
@@ -79,7 +90,7 @@ public class Parser {
     private Statement parseMoveCommand() throws SyntaxError {
         if (token.peek("move")) {
             token.consume();
-            return new ActionCommand("move", parseDirection());
+            return new ActionCommand("move", parseDirection(),crew);
         } else throw new SyntaxError("Error");
     }
 
@@ -99,7 +110,7 @@ public class Parser {
     private Statement parseAttackCommand() throws SyntaxError {
         if (token.peek("shoot")) {
             token.consume();
-            return new ActionCommand("shoot", parseDirection());
+            return new ActionCommand("shoot", parseDirection(),crew);
         } else throw new SyntaxError("Error");
     }
 
@@ -183,15 +194,14 @@ public class Parser {
     /**
      * Identifier
      */
-    private Statement parseIdentifier() throws SyntaxError {
+    private Identifier parseIdentifier() throws SyntaxError {
         if (reservedWords.contains(token.peek())) {
             token.consume();
             throw new SyntaxError("Error");
         }
         if (!token.isNumber("" + token.peek().charAt(0))) {
             if (token.peek().substring(1).chars().allMatch(Character::isLetterOrDigit)) {
-                token.consume();
-                return new Identifier(token.peek());
+                return new Identifier(token.consume());
             }
         }
         throw new SyntaxError("Error");
