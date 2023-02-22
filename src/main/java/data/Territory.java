@@ -17,15 +17,4 @@ public class Territory {
         this.Territory = Territory;
     }
 
-    public void showMapInfo(){
-        for (int i = 0 ; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                this.Territory[i][j].showInfo();
-                System.out.print("  ");
-
-            }
-            System.out.println("");
-
-        }
-    }
 }

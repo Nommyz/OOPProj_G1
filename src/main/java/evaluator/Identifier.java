@@ -1,6 +1,7 @@
 package evaluator;
 
 import java.util.Map;
+import java.util.Random;
 
 public class Identifier implements Statement{
     protected Map<String, Long> variables;
@@ -15,11 +16,22 @@ public class Identifier implements Statement{
 
     @Override
     public long evaluate() throws SyntaxError {
-        return 0;
+        Random random = new Random();
+        long MAX_RAND_BOUND = 1000;
+        String varName = val;
+        if (varName.equals("random")) {
+            return random.nextLong(MAX_RAND_BOUND);
+        } else if (variables.containsKey(varName)) {
+            return variables.get(varName);
+        } else {
+            throw new SyntaxError("Error");
+        }
+
     }
 
     @Override
     public StringBuilder addCommand(StringBuilder s) {
-        return null;
+        s.append("Identifiercalled ");
+        return s;
     }
 }

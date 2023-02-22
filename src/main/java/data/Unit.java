@@ -6,7 +6,8 @@ public class Unit {
     public String name;
     public int[] position;
     public Territory map;
-    public Unit(String name,Territory map){
+
+    public Unit(String name, Territory map) {
         position = new int[2];
         position[0] = 0;
         position[1] = 0;
@@ -14,16 +15,39 @@ public class Unit {
         this.map = map;
     }
 
-    public void move(Direction direction){
+    public void move(Direction direction) {
 
     }
-    public void shoot(Direction direction){
+
+    public void shoot(Direction direction) {
 
     }
-    public void invest(){
+
+    public void invest() {
 
     }
-    public void getPosition(){
+
+    public void collect() {
+
+    }
+
+    public void done() {
+
+    }
+
+    public void relocate() {
+
+    }
+
+    public long nearBy(Direction direction) {
+        return 0;
+    }
+
+    public long getOpponent() {
+        return 0;
+    }
+
+    public void getPosition() {
         System.out.println("row: " + position[0] + " column: " + position[1]);
     }
 }

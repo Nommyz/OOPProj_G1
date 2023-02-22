@@ -1,16 +1,20 @@
 package evaluator;
 
+import data.Unit;
+
 public class InfoExpr implements Statement {
     private String arg;
     private Direction direction;
-
-    public InfoExpr(String command) {
+    private Unit crew ;
+    public InfoExpr(String command,Unit crew) {
         this.arg = command;
+        this.crew = crew;
     }
 
-    public InfoExpr(String command, Direction direction) {
+    public InfoExpr(String command, Direction direction, Unit crew) {
         this.arg = command;
         this.direction = direction;
+        this.crew = crew;
     }
 
     public String Command() {
@@ -23,12 +27,19 @@ public class InfoExpr implements Statement {
 
     @Override
     public long evaluate() throws SyntaxError {
-       return 0;
+        // todo
+        return switch (Command()) {
+            case "opponent" -> crew.getOpponent();
+            case "nearby" -> crew.nearBy(Direction());
+            default -> throw new SyntaxError("Error");
+        };
     }
+
 
     @Override
     public StringBuilder addCommand(StringBuilder s) {
-        return null;
+        s.append("InfoExpr ");
+        return s;
     }
 
 

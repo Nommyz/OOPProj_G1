@@ -2,52 +2,47 @@ package evaluator;
 
 import data.Unit;
 
-public class ActionCommand implements Statement{
-    private String condition;
+public class ActionCommand implements Statement {
+    private String action;
     private Direction direction;
     private Statement expression;
     private Unit crew;
-    private boolean check1,check2;
-    public ActionCommand(String action, Direction direction,Unit crew) {
-        this.condition = action;
+    private boolean check1 = false, check2 = false;
+
+    public ActionCommand(String action, Direction direction, Unit crew) {
+        this.action = action;
         this.direction = direction;
         this.crew = crew;
         check1 = true;
     }
+
     public ActionCommand(String action, Statement expression) {
-        this.condition= action;
+        this.action = action;
         this.expression = expression;
-    }
-    public String ActionCmd() {
-        return condition;
+        check2 = true;
     }
 
-    public Direction  Direction() {
-        return direction;
+    public ActionCommand(String action) {
+        this.action = action;
     }
 
     @Override
     public long evaluate() throws SyntaxError {
-        if(check1){
-            if (ActionCmd().equals("move")) {
-
-                crew.move(Direction());
-
-            } else if (ActionCmd().equals("shoot")) {
-
-                crew.shoot(Direction());
-
-            } else {
-                throw new SyntaxError("Error");
-            }
-        }else{
-
+        switch (action) {
+            case "move" -> crew.move(direction);
+            case "shoot" ->  crew.shoot(direction);
+            case "invest" ->  crew.invest();
+            case "collect" -> crew.collect();
+            case "done" -> crew.done();
+            case "relocate" -> crew.relocate();
+            default -> throw new SyntaxError("Error");
         }
-
         return 0;
     }
+
     @Override
     public StringBuilder addCommand(StringBuilder s) {
-        return null;
+        s.append("ActionStatement ");
+        return s;
     }
 }

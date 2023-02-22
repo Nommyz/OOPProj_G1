@@ -79,11 +79,18 @@ public class Parser {
 
     }
     private Statement parseDoneCommand() throws SyntaxError {
+        if (token.peek("done")) {
+            token.consume();
+            return new ActionCommand("done");
+        }else throw new SyntaxError("ERROR");
+
     }
     private Statement parseRelocateCommand() throws SyntaxError {
-
+        if (token.peek("relocate")) {
+            token.consume();
+            return new ActionCommand("relocate");
+        }else throw new SyntaxError("Error");
     }
-
     /**
      * MoveCommand → move Direction
      */
@@ -178,7 +185,7 @@ public class Parser {
      */
     private Statement parsePower() throws SyntaxError {
         if (token.isNumber(token.peek())) {
-            return new IntLit(Integer.parseInt(token.consume()));
+            return new LongIntLit(Integer.parseInt(token.consume()));
         } else if (token.peek("(")) {
             token.consume("(");
             Statement expression = parseExpression();
@@ -214,11 +221,11 @@ public class Parser {
         switch (token.peek()) {
             case "opponent":
                 token.consume();
-                return new InfoExpr("opponent");
+                return new InfoExpr("opponent",crew);
             case "nearby":
                 token.consume();
                 Direction direction = parseDirection();
-                return new InfoExpr("nearby", direction);
+                return new InfoExpr("nearby", direction,crew);
             default:
                 throw new SyntaxError("Error");
         }

@@ -1,9 +1,9 @@
 package evaluator;
 
-public class IntLit implements Statement {
+public class LongIntLit implements Statement {
     private int val;
 
-    public IntLit(int val) {
+    public LongIntLit(int val) {
         this.val = val;
     }
 
@@ -13,12 +13,13 @@ public class IntLit implements Statement {
 
     @Override
     public long evaluate() throws SyntaxError {
-        return 0;
+        return val;
     }
 
     @Override
     public StringBuilder addCommand(StringBuilder s) {
-        return null;
+        s.append("LongIntlit ");
+        return s;
     }
 
 

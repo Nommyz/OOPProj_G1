@@ -19,7 +19,7 @@ public class IfStatement implements Statement{
         return trueState;
     }
 
-    public Statement StatementIfFalse() {
+    public Statement falseState() {
         return falseState;
     }
 

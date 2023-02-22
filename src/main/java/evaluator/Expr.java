@@ -25,11 +25,22 @@ public class Expr implements Statement {
 
     @Override
     public long evaluate() throws SyntaxError {
-        return 0;
+        long lv = Left().evaluate();
+        long rv = Right().evaluate();
+        return switch (Op()) {
+            case "+" -> lv + rv;
+            case "-" -> lv - rv;
+            case "*" -> lv * rv;
+            case "/" -> lv / rv;
+            case "%" -> lv % rv;
+            case "^" -> (int) Math.pow(lv, rv);
+            default -> throw new SyntaxError("Error");
+        };
     }
 
     @Override
     public StringBuilder addCommand(StringBuilder s) {
-        return null;
+        s.append("Expression ");
+        return s;
     }
 }
