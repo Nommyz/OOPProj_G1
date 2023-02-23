@@ -42,7 +42,7 @@ public class ActionCommand implements Statement {
 
     @Override
     public StringBuilder addCommand(StringBuilder s) {
-        s.append("ActionStatement ");
+        s.append("ActionStatement: " + direction + " ");
         return s;
     }
 }

@@ -4,11 +4,12 @@ public class AssignStatement implements Statement {
     private Identifier identifier;
     private String op;
     private Statement expression;
-
-    public AssignStatement(Identifier identifier, String op, Statement expression) {
+    public VariableStorage variableStorage;
+    public AssignStatement(Identifier identifier, String op, Statement expression,VariableStorage variableStorage) {
         this.identifier = identifier;
         this.op = op;
         this.expression = expression;
+        this.variableStorage = variableStorage;
     }
 
     public Identifier Identifier() {
@@ -25,13 +26,13 @@ public class AssignStatement implements Statement {
 
     @Override
     public long evaluate() throws SyntaxError {
-        String stringidentifiers = Identifier().value();
+        String stringidentifiers = identifier.value();
         if (!stringidentifiers.equals("random")) {
-            if (!identifier.variables.containsKey(stringidentifiers)) {
-                identifier.variables.put(stringidentifiers, 0L);
+            if (!variableStorage.variables.containsKey(stringidentifiers)) {
+                variableStorage.variables.put(stringidentifiers, 0L);
             }
             long val = Expression().evaluate();
-            identifier.variables.put(stringidentifiers, val);
+            variableStorage.variables.put(stringidentifiers, val);
         }
         return 0;
     }

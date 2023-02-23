@@ -4,11 +4,12 @@ import java.util.Map;
 import java.util.Random;
 
 public class Identifier implements Statement{
-    protected Map<String, Long> variables;
     protected String val;
+    public VariableStorage variableStorage;
 
-    public Identifier(String val) {
+    public Identifier(String val,VariableStorage variableStorage) {
         this.val = val;
+        this.variableStorage = variableStorage;
     }
     public String value() throws SyntaxError {
         return val;
@@ -21,8 +22,8 @@ public class Identifier implements Statement{
         String varName = val;
         if (varName.equals("random")) {
             return random.nextLong(MAX_RAND_BOUND);
-        } else if (variables.containsKey(varName)) {
-            return variables.get(varName);
+        } else if (variableStorage.variables.containsKey(varName)) {
+            return variableStorage.variables.get(varName);
         } else {
             throw new SyntaxError("Error");
         }
