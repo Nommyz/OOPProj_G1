@@ -1,6 +1,6 @@
 package data;
 
-public class Territory {
+public class Territory  {
     int m ;
     int n;
     public Region[][] Territory;
@@ -16,5 +16,7 @@ public class Territory {
         }
         this.Territory = Territory;
     }
+
+    public 
 
 }
