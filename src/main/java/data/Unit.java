@@ -24,8 +24,24 @@ public class Unit {
 
     }
 
-    public void invest(int money) {
+    public void invest(int TerritoryDeposit , int playerBudget , int investAmount) { // still confuse about "player may invest in a region belonging to no player as long as that region is adjacent to another region belonging to the player."
         
+        
+        if(playerBudget > 1){   // 1 can be change to balancing the game
+            playerBudget--;
+            playerBudget = playerBudget-investAmount;
+            TerritoryDeposit = TerritoryDeposit+investAmount;
+            System.out.println("You invest : " + investAmount + " Territory Deposit : " + TerritoryDeposit);
+            if(TerritoryDeposit > 1000000){
+                System.out.println("Reach Maximum Territory Deposit");
+                int OverDeposit = TerritoryDeposit-1000000;
+                TerritoryDeposit = TerritoryDeposit - OverDeposit;
+                playerBudget = playerBudget+OverDeposit;
+            }
+        }else{
+            playerBudget--;
+            System.out.println("Don't have enough money"); //pls add something to end player's turn
+        }
     }
 
     public void collect(int TerritoryDeposit , int playerBudget , int collectAmount) { 
