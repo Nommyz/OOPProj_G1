@@ -43,9 +43,9 @@ public class Parser {
         };
     }
 
-    /**
-     * Command → AssignmentStatement | ActionCommand
-     */
+//    /**
+//     * Command  AssignmentStatement | ActionCommand
+//     */
     private Statement parseCommand() throws SyntaxError {
         if (token.peek("done") || token.peek("relocate") || token.peek("move") || token.peek("invest") || token.peek("collect") || token.peek("shoot")) {
             return parseActionCommand();
@@ -54,9 +54,9 @@ public class Parser {
         }
     }
 
-    /**
-     * AssignmentStatement → <identifier> = Expression
-     */
+//    /**
+//     * AssignmentStatement  <identifier> = Expression
+//     */
     private Statement parseAssignmentStatement() throws SyntaxError {
         Identifier identifier = parseIdentifier();
         token.consume("=");
@@ -64,9 +64,9 @@ public class Parser {
         return new AssignStatement(identifier, "=", expression,variableStorage);
     }
 
-    /**
-     * ActionCommand → done | relocate | MoveCommand(move) | RegionCommand | AttackCommand(shoot)
-     * */
+//    /**
+//     * ActionCommand  done | relocate | MoveCommand(move) | RegionCommand | AttackCommand(shoot)
+//     * */
     private Statement parseActionCommand() throws SyntaxError {
         return switch (token.peek()) {
             case "move" -> parseMoveCommand();
@@ -92,9 +92,9 @@ public class Parser {
             return new ActionCommand("relocate");
         }else throw new SyntaxError("Error");
     }
-    /**
-     * MoveCommand → move Direction
-     */
+//    /**
+//     * MoveCommand  move Direction
+//     */
     private Statement parseMoveCommand() throws SyntaxError {
         if (token.peek("move")) {
             token.consume();
@@ -112,9 +112,9 @@ public class Parser {
         } else throw new SyntaxError("Error");
     }
 
-    /**
-     * AttackCommand → shoot Direction
-     */
+//    /**
+//     * AttackCommand  shoot Direction
+//     */
     private Statement parseAttackCommand() throws SyntaxError {
         if (token.peek("shoot")) {
             token.consume();
@@ -122,9 +122,9 @@ public class Parser {
         } else throw new SyntaxError("Error");
     }
 
-    /**
-     Expression → Expression + Term | Expression - Term | Term
-     */
+//    /**
+//     Expression  Expression + Term | Expression - Term | Term
+//     */
     private Statement parseExpression() throws SyntaxError {
         Statement term = parseTerm();
         while (token.peek("+") || token.peek("-")) {
@@ -143,9 +143,9 @@ public class Parser {
         return term;
     }
 
-    /**
-     Term → Term * Factor | Term / Factor | Term % Factor | Factor
-     */
+//    /**
+//     Term  Term * Factor | Term / Factor | Term % Factor | Factor
+//     */
     private Statement parseTerm() throws SyntaxError {
         Statement factor = parseFactor();
         while (token.peek("*") || token.peek("/") || token.peek("%")) {
@@ -168,9 +168,9 @@ public class Parser {
         return factor;
     }
 
-    /**
-     * Factor → Power ^ Factor |   Power
-     */
+//    /**
+//     * Factor  Power ^ Factor |   Power
+//     */
     private Statement parseFactor() throws SyntaxError {
         Statement power = parsePower();
         if (token.peek("^")) {
@@ -181,9 +181,9 @@ public class Parser {
 
     }
 
-    /**
-     * Power → <number> | <identifier> |  (Expression) | InfoExpression
-     */
+//    /**
+//     * Power  <number> | <identifier> |  (Expression) | InfoExpression
+//     */
     private Statement parsePower() throws SyntaxError {
         if (token.isNumber(token.peek())) {
             return new LongIntLit(Integer.parseInt(token.consume()));
@@ -199,9 +199,9 @@ public class Parser {
         }
     }
 
-    /**
-     * Identifier
-     */
+//    /**
+//     * Identifier
+//     */
     private Identifier parseIdentifier() throws SyntaxError {
         if (reservedWords.contains(token.peek())) {
             token.consume();
@@ -215,9 +215,9 @@ public class Parser {
         throw new SyntaxError("Error");
     }
 
-    /**
-     * InfoExpression → opponent | nearby Direction
-     */
+//    /**
+//     * InfoExpression  opponent | nearby Direction
+//     */
     private Statement parseInfoExpression() throws SyntaxError {
         switch (token.peek()) {
             case "opponent":
@@ -233,7 +233,7 @@ public class Parser {
     }
 
     /**
-     * Direction → return direction
+     * Direction  return direction
      */
     private Direction parseDirection() throws SyntaxError {
         Direction direction = Direction.getDirection(token.peek());
@@ -245,9 +245,9 @@ public class Parser {
         }
     }
 
-    /**
-     * BlockStatement → { Statement* }
-     */
+//    /**
+//     * BlockStatement  { Statement* }
+//     */
     private BlockStatement parseBlockStatement() throws SyntaxError {
         token.consume("{");
 
@@ -261,7 +261,7 @@ public class Parser {
     }
 
     /**
-     * ifStatement → if (Expression) then statement  else statement
+     * ifStatement  if (Expression) then statement  else statement
      */
     private Statement parseIfStatement() throws SyntaxError {
         token.consume("if");
@@ -277,7 +277,7 @@ public class Parser {
     }
 
     /**
-     * WhileStatement → while ( Expression ) Statement
+     * WhileStatement  while ( Expression ) Statement
      */
     private Statement parseWhileStatement() throws SyntaxError {
         token.consume("while");

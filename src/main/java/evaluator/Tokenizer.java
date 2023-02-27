@@ -8,7 +8,7 @@ public class Tokenizer {
     private static final Pattern splitPattern =
             Pattern.compile("([\\s]++)|(?<=[=+-\\-*/%(){}^])|(?=[=+\\-*/%(){}^])");
 
-    private Queue<String> tokenlist;
+    protected Queue<String> tokenlist;
 
     public Tokenizer(String stream) {
         tokenlist = new LinkedList<>();
@@ -21,9 +21,11 @@ public class Tokenizer {
     }
 
     public String peek() throws SyntaxError {
-        if (!tokenlist.isEmpty()) {
+        if (tokenlist.size() != 0)
             return tokenlist.element();
-        } else throw new SyntaxError("Empty");
+        else {
+            return "No Element";
+        }
     }
 
     public boolean peek(String s) throws SyntaxError {
