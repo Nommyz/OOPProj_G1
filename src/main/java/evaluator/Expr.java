@@ -33,7 +33,7 @@ public class Expr implements Statement {
             case "*" -> lv * rv;
             case "/" -> lv / rv;
             case "%" -> lv % rv;
-            case "^" -> (int) Math.pow(lv, rv);
+            case "^" -> (long) Math.pow(lv, rv);
             default -> throw new SyntaxError("Error");
         };
     }

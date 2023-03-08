@@ -82,14 +82,14 @@ public class Parser {
     private Statement parseDoneCommand() throws SyntaxError {
         if (token.peek("done")) {
             token.consume();
-            return new ActionCommand("done");
+            return new ActionCommand("done",crew);
         }else throw new SyntaxError("ERROR");
 
     }
     private Statement parseRelocateCommand() throws SyntaxError {
         if (token.peek("relocate")) {
             token.consume();
-            return new ActionCommand("relocate");
+            return new ActionCommand("relocate",crew);
         }else throw new SyntaxError("Error");
     }
 //    /**
@@ -105,10 +105,10 @@ public class Parser {
     private Statement parseRegionCommand() throws SyntaxError {
         if (token.peek("invest")) {
             token.consume();
-            return new ActionCommand("invest", parseExpression());
+            return new ActionCommand("invest", parseExpression(),crew);
         } else if (token.peek("collect")) {
             token.consume();
-            return new ActionCommand("collect", parseExpression());
+            return new ActionCommand("collect", parseExpression(),crew);
         } else throw new SyntaxError("Error");
     }
 
@@ -118,7 +118,7 @@ public class Parser {
     private Statement parseAttackCommand() throws SyntaxError {
         if (token.peek("shoot")) {
             token.consume();
-            return new ActionCommand("shoot", parseDirection(),crew);
+            return new ActionCommand("shoot", parseDirection(),parseExpression(),crew);
         } else throw new SyntaxError("Error");
     }
 

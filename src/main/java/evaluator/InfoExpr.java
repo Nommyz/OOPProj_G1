@@ -29,8 +29,8 @@ public class InfoExpr implements Statement {
     public long evaluate() throws SyntaxError {
         // todo
         return switch (Command()) {
-            case "opponent" -> crew.getOpponent();
-            case "nearby" -> crew.nearBy(Direction());
+            case "opponent" -> crew.opponent();
+            case "nearby" -> crew.nearby(Direction());
             default -> throw new SyntaxError("Error");
         };
     }
