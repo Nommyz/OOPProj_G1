@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 
 public class TestMove {
     Territory territory = new Territory();
-    Unit player = new Unit("Player1",territory);
+    Unit player = new Unit("P1",territory,3,3,1000);
     Unit player2 = new Unit("Player2",territory);
 
     public void delay(){

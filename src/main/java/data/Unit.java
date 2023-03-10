@@ -175,8 +175,6 @@ public class Unit {
         }
         return 0;
     }
-
-    // need to fix return
     public int opponent() {
         Direction[] directions = {UP, DOWN, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
         int maxDistance = 6;
@@ -271,11 +269,9 @@ public class Unit {
     public Set<Region> getOwnedRegions() {
         return ownedRegions;
     }
-
     public long[] nextPosition(long[] currentPosition, Direction direction) {
-        long[] nextPosition = Arrays.copyOf(currentPosition, 2);
-
-        switch (direction) {
+        long[] nextPosition = currentPosition.clone();
+        switch(direction) {
             case UP:
                 nextPosition[0]--;
                 break;
@@ -283,69 +279,56 @@ public class Unit {
                 nextPosition[0]++;
                 break;
             case UP_RIGHT:
-
-                nextPosition[0]--;
-
+                nextPosition[0] -= currentPosition[1] % 2 == 0 ? 0 : 1;
                 nextPosition[1]++;
                 break;
             case UP_LEFT:
-
-                nextPosition[0]--;
-
+                nextPosition[0] -= currentPosition[1] % 2 == 0 ? 0 : 1;
                 nextPosition[1]--;
                 break;
             case DOWN_RIGHT:
-
-                nextPosition[0]++;
-
+                nextPosition[0] += currentPosition[1] % 2 != 0 ? 0 : 1;
                 nextPosition[1]++;
                 break;
             case DOWN_LEFT:
-
-                nextPosition[0]++;
-
+                nextPosition[0] += currentPosition[1] % 2 != 0 ? 0 : 1;
                 nextPosition[1]--;
                 break;
+            default:
+                break;
         }
-
         return nextPosition;
     }
+    // need to fix
     public long[] searchPosition(int distance,long[] currentPosition, Direction direction) {
         long[] nextPosition = Arrays.copyOf(currentPosition, 2);
 
-        switch (direction) {
+        switch(direction) {
             case UP:
-                nextPosition[0] -= distance;
+                nextPosition[0]-= distance;
                 break;
             case DOWN:
-                nextPosition[0] += distance;
+                nextPosition[0]+= distance;
                 break;
             case UP_RIGHT:
-
-                nextPosition[0]-= distance;
-
-                nextPosition[1]+= distance;
+                nextPosition[0] -= currentPosition[1] % 2 == 0 ? 0 : distance;
+                nextPosition[1]++;
                 break;
             case UP_LEFT:
-
-                nextPosition[0] -= distance;
-
-                nextPosition[1] -= distance;
+                nextPosition[0] -= currentPosition[1] % 2 == 0 ? 0 : distance;
+                nextPosition[1]--;
                 break;
             case DOWN_RIGHT:
-
-                nextPosition[0] += distance;
-
-                nextPosition[1] += distance;
+                nextPosition[0] += currentPosition[1] % 2 != 0 ? 0 : distance;
+                nextPosition[1]++;
                 break;
             case DOWN_LEFT:
-
-                nextPosition[0] += distance;
-
-                nextPosition[1] -= distance;
+                nextPosition[0] += currentPosition[1] % 2 != 0 ? 0 : distance;
+                nextPosition[1]--;
+                break;
+            default:
                 break;
         }
-
         return nextPosition;
     }
 

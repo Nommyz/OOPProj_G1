@@ -16,8 +16,13 @@ public class TestCollect {
         p1.invest(200);
         p1.printInfo();
         p1.newTurn();
-        p1.collect(100);
+        p1.collect(200);
         p1.printInfo();
+        p1.newTurn();
+        p1.collect(50);
+        p1.printInfo();
+        p1.newTurn();
+        p1.collect(50); // lose region due to no deposit
     }
     @Test
     void collectOpponentRegion(){

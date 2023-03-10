@@ -53,6 +53,7 @@ public class Region {
     }
 
     public long updateCollectEvent(long amount) {
+        System.out.println(deposit);
         if (this.deposit - amount < 0)
             return 0;
         else if (this.deposit - amount == 0) {
