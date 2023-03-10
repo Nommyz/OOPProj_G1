@@ -38,7 +38,8 @@ public class Unit {
         ownedRegions.add(territory.region(cityPosition));
         this.budget = Configuration.instance().init_budget;
     }
-// for test
+
+    // for test
     public Unit(String name, Territory territory, int row, int column, int budget) {
         this.name = name;
         this.territory = territory;
@@ -64,6 +65,7 @@ public class Unit {
         }
         this.printInfo();
     }
+
     public void randomMove() {
         if (isPlayerDone) {
             return;
@@ -174,14 +176,20 @@ public class Unit {
         return 0;
     }
 
+    // need to fix return
     public int opponent() {
-        Direction[] directions = { UP, DOWN, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT };
+        Direction[] directions = {UP, DOWN, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
         int maxDistance = 6;
         for (int i = 1; i <= maxDistance; i++) {
             for (Direction direction : directions) {
                 long[] nextPos = nextPosition(position, direction);
                 if (territory.region(nextPos).getOwner() != this && isWithinBound(nextPos) && isOpponentRegion(nextPos)) {
-                    return i;
+                    if (direction.equals(UP)) return i * 10 + 1;
+                    if (direction.equals(UP_RIGHT)) return i * 10 + 2;
+                    if (direction.equals(DOWN_RIGHT)) return i * 10 + 3;
+                    if (direction.equals(DOWN)) return i * 10 + 4;
+                    if (direction.equals(DOWN_LEFT)) return i * 10 + 5;
+                    if (direction.equals(UP_LEFT)) return i * 10 + 6;
                 }
             }
         }
@@ -214,6 +222,7 @@ public class Unit {
         boolean colInRange = position[1] >= 0 && position[1] < territory.column();
         return rowInRange && colInRange;
     }
+
     private boolean isOpponentRegion(long[] position) {
         if (!isWithinBound(position)) {
             return false;
@@ -221,6 +230,7 @@ public class Unit {
         Unit owner = territory.region(position).getOwner();
         return owner != null && owner != this;
     }
+
     public Map<String, Long> getVariable() {
         return variables;
     }
@@ -273,27 +283,27 @@ public class Unit {
                 nextPosition[0]++;
                 break;
             case UP_RIGHT:
-                if (currentPosition[1] % 2 == 0) {
-                    nextPosition[0]--;
-                }
+
+                nextPosition[0]--;
+
                 nextPosition[1]++;
                 break;
             case UP_LEFT:
-                if (currentPosition[1] % 2 != 0) {
-                    nextPosition[0]--;
-                }
+
+                nextPosition[0]--;
+
                 nextPosition[1]--;
                 break;
             case DOWN_RIGHT:
-                if (currentPosition[1] % 2 == 0) {
-                    nextPosition[0]++;
-                }
+
+                nextPosition[0]++;
+
                 nextPosition[1]++;
                 break;
             case DOWN_LEFT:
-                if (currentPosition[1] % 2 != 0) {
-                    nextPosition[0]++;
-                }
+
+                nextPosition[0]++;
+
                 nextPosition[1]--;
                 break;
         }
