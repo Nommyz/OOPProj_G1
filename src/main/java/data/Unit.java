@@ -182,8 +182,8 @@ public class Unit {
         int maxDistance = 6;
         for (int i = 1; i <= maxDistance; i++) {
             for (Direction direction : directions) {
-                long[] nextPos = nextPosition(position, direction);
-                if (territory.region(nextPos).getOwner() != this && isWithinBound(nextPos) && isOpponentRegion(nextPos)) {
+                long[] nextPos = searchPosition(i,position, direction);
+                if (isWithinBound(nextPos) && territory.region(nextPos).getOwner() != this &&  isOpponentRegion(nextPos)) {
                     if (direction.equals(UP)) return i * 10 + 1;
                     if (direction.equals(UP_RIGHT)) return i * 10 + 2;
                     if (direction.equals(DOWN_RIGHT)) return i * 10 + 3;
@@ -305,6 +305,44 @@ public class Unit {
                 nextPosition[0]++;
 
                 nextPosition[1]--;
+                break;
+        }
+
+        return nextPosition;
+    }
+    public long[] searchPosition(int distance,long[] currentPosition, Direction direction) {
+        long[] nextPosition = Arrays.copyOf(currentPosition, 2);
+
+        switch (direction) {
+            case UP:
+                nextPosition[0] -= distance;
+                break;
+            case DOWN:
+                nextPosition[0] += distance;
+                break;
+            case UP_RIGHT:
+
+                nextPosition[0]-= distance;
+
+                nextPosition[1]+= distance;
+                break;
+            case UP_LEFT:
+
+                nextPosition[0] -= distance;
+
+                nextPosition[1] -= distance;
+                break;
+            case DOWN_RIGHT:
+
+                nextPosition[0] += distance;
+
+                nextPosition[1] += distance;
+                break;
+            case DOWN_LEFT:
+
+                nextPosition[0] += distance;
+
+                nextPosition[1] -= distance;
                 break;
         }
 
