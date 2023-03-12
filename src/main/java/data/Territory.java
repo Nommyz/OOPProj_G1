@@ -26,14 +26,13 @@ public class Territory {
         return regions.get(index);
     }
 
-    public void printInfo() {
+    public void printTerritoryData() {
         for (int i = 0; i < m; i++) {
-            System.out.println("Row " + i);
             for (int j = 0; j < n; j++) {
                 int index = i * n + j;
-                regions.get(index).printInfo();
+                regions.get(index).printRegionData();
             }
-            System.out.println();
+            System.out.println("-----------------------------");
         }
     }
 

@@ -23,7 +23,7 @@ public class Region {
         this.owner = player;
     }
 
-    public void setCenterCityDeposit(int amount) {
+    public void setDeposit(long amount) {
         this.deposit = amount;
     }
 
@@ -53,7 +53,6 @@ public class Region {
     }
 
     public long updateCollectEvent(long amount) {
-        System.out.println(deposit);
         if (this.deposit - amount < 0)
             return 0;
         else if (this.deposit - amount == 0) {
@@ -82,11 +81,11 @@ public class Region {
         }
     }
 
-    public void printInfo() {
+    public void printRegionData() {
         System.out.print("[" + rowPosition + "," + columnPosition + "]");
-        System.out.print(" Deposit : " + this.deposit);
-        System.out.print(" Owner : " + (this.owner != null ? this.owner.getName() : "no"));
-        System.out.print(" Centercity : " + (isCenterCity ? this.owner.getName() : "no"));
+        System.out.print(" | Deposit : " + this.deposit);
+        System.out.print(" | Owner : " + (this.owner != null ? this.owner.getName() : "Free"));
+        System.out.print(" | Centercity : " + (isCenterCity ? "Yes" : "No"));
         System.out.println(" ");
     }
 

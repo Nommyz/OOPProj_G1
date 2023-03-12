@@ -28,7 +28,7 @@ public class Configuration {
             props.load(input);
             input.close();
         } catch (IOException e) {
-            System.err.println("Failed to read config file: " + e.getMessage());
+            System.err.println("Error read file :" + e.getMessage());
             return;
         }
         m = Integer.parseInt(props.getProperty("m"));

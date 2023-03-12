@@ -12,7 +12,7 @@ public class Unit {
     private long budget;
     protected Map<String, Long> variables;
     private final long[] position = new long[2];
-    private final long[] cityPosition = new long[2];
+    private long[] cityCenterPosition = new long[2];
     private final Set<Region> ownedRegions = new HashSet<>();
     private boolean isPlayerDone = false;
     private boolean isLose = false;
@@ -22,20 +22,20 @@ public class Unit {
         this.name = name;
         this.territory = territory;
         ThreadLocalRandom rand = ThreadLocalRandom.current();
-        long startRow = rand.nextLong(territory.row());
-        long startColumn = rand.nextLong(territory.column());
-        while (territory.region(new long[]{startRow, startColumn}).getOwner() != null) {
-            startRow = rand.nextLong(territory.row());
-            startColumn = rand.nextLong(territory.column());
+        long spawnRow = rand.nextLong(territory.row());
+        long spawnCol = rand.nextLong(territory.column());
+        while (territory.region(new long[]{spawnRow , spawnCol}).getOwner() != null) {
+            spawnRow = rand.nextLong(territory.row());
+            spawnCol = rand.nextLong(territory.column());
         }
-        position[0] = startRow;
-        position[1] = startColumn;
-        cityPosition[0] = position[0];
-        cityPosition[1] = position[1];
-        territory.region(cityPosition).setCityCenter(true);
-        territory.region(cityPosition).setOwner(this);
-        territory.region(cityPosition).setCenterCityDeposit(Configuration.instance().init_center_dep);
-        ownedRegions.add(territory.region(cityPosition));
+        position[0] = spawnRow;
+        position[1] = spawnCol;
+        cityCenterPosition[0] = position[0];
+        cityCenterPosition[1] = position[1];
+        territory.region(cityCenterPosition).setCityCenter(true);
+        territory.region(cityCenterPosition).setOwner(this);
+        territory.region(cityCenterPosition).setDeposit(Configuration.instance().init_center_dep);
+        ownedRegions.add(territory.region(cityCenterPosition));
         this.budget = Configuration.instance().init_budget;
     }
 
@@ -45,17 +45,17 @@ public class Unit {
         this.territory = territory;
         position[0] = row;
         position[1] = column;
-        cityPosition[0] = row;
-        cityPosition[1] = column;
-        territory.region(cityPosition).setCityCenter(true);
-        territory.region(cityPosition).setOwner(this);
-        territory.region(cityPosition).setCenterCityDeposit(Configuration.instance().init_center_dep);
-        ownedRegions.add(territory.region(cityPosition));
+        cityCenterPosition[0] = row;
+        cityCenterPosition[1] = column;
+        territory.region(cityCenterPosition).setCityCenter(true);
+        territory.region(cityCenterPosition).setOwner(this);
+        territory.region(cityCenterPosition).setDeposit(Configuration.instance().init_center_dep);
+        ownedRegions.add(territory.region(cityCenterPosition));
         this.budget = budget;
     }
 
     public void move(Direction direction) {
-        if (isPlayerDone || !pay(1)) {
+        if (isPlayerDone || !cost(1)) {
             return;
         }
         long[] nextPosition = nextPosition(position, direction);
@@ -63,7 +63,7 @@ public class Unit {
             position[0] = nextPosition[0];
             position[1] = nextPosition[1];
         }
-        this.printInfo();
+        this.printUnitData();
     }
 
     public void randomMove() {
@@ -82,23 +82,25 @@ public class Unit {
             return;
         }
 
-        if (!pay(1)) {
+        if (!cost(1)) {
             return;
         }
-
+        if (amount < 0) {
+            System.out.println("Can't invest amount < 0");
+            return;
+        }
         Region region = territory.region(position);
         if (region.getOwner() != null && region.getOwner() != this) {
-            System.out.println(name + " can't invest on this region because it was occupied by opponent.");
+            System.out.println(name + " can't invest in opponent region.");
             return;
         }
 
-        if (!pay(amount)) {
+        if (!cost(amount)) {
             return;
         }
-
         region.updateInvestEvent(amount, this);
         System.out.println(name + " invested " + amount + " in region position (" + position[0] + "," + position[1] + ")");
-        this.done();
+        done();
     }
 
 
@@ -107,13 +109,17 @@ public class Unit {
             return;
         }
 
-        if (!pay(1)) {
+        if (!cost(1)) {
+            return;
+        }
+        if (amount < 0) {
+            System.out.println("Can't collect amount < 0");
             return;
         }
 
         Region currentRegion = territory.region(position);
         if (currentRegion.getOwner() != this) {
-            System.out.println(name + " can't collect because they don't own this region.");
+            System.out.println(name + " can't collect because this unit not own this region.");
             return;
         }
 
@@ -126,11 +132,11 @@ public class Unit {
             return;
         }
 
-        if (!pay(1)) {
+        if (!cost(1)) {
             return;
         }
 
-        if (!pay(amount)) {
+        if (!cost(amount)) {
             return;
         }
 
@@ -141,7 +147,7 @@ public class Unit {
 
         Region region = territory.region(shootDirection);
         if (region.getOwner() == null) {
-            System.out.println(name + " can't shoot an unowned region.");
+            System.out.println(name + " can't shoot an unknowned region.");
             return;
         }
 
@@ -159,22 +165,81 @@ public class Unit {
         done();
     }
 
-    public long nearby(Direction direction) {
-        long[] nearbyOpponent = position;
-        for (int i = 1; i < Configuration.instance().m * Configuration.instance().n; i++) {
-            nearbyOpponent = nextPosition(nearbyOpponent, direction);
-            if (isOpponentRegion(nearbyOpponent)) {
-                long currentdeposit = territory.region(nearbyOpponent).getDeposit();
-                int depositDigits = 0;
-                while (currentdeposit != 0) {
-                    currentdeposit /= 10;
-                    depositDigits++;
+
+    public void relocate() {
+        if (isPlayerDone || isLose()) {
+            return;
+        }
+
+        long[] currentPosition = cityCenterPosition;
+        int distance = 0;
+        System.out.print("[" + cityCenterPosition[0] + "," + cityCenterPosition[1] + "]");
+
+        while ((currentPosition[0] != position[0] && currentPosition[1] != position[1])
+                || currentPosition[1] != position[1]
+                || currentPosition[0] != position[0]) {
+            if (currentPosition[0] == position[0]) {
+                currentPosition = currentPosition[1] < position[1]
+                        ? compareDirection(currentPosition, UP_RIGHT, DOWN_RIGHT)
+                        : compareDirection(currentPosition, UP_LEFT, DOWN_LEFT);
+            } else if (currentPosition[0] > position[0]) {
+                if (currentPosition[1] == position[1]) {
+                    currentPosition = nextPosition(currentPosition, UP);
+                } else if (currentPosition[1] < position[1]) {
+                    currentPosition = compareDirection(currentPosition, UP, UP_RIGHT);
+                } else {
+                    currentPosition = compareDirection(currentPosition, UP, UP_LEFT);
                 }
-                return 100L * i + depositDigits;
+            } else {
+                if (currentPosition[1] == position[1]) {
+                    currentPosition = nextPosition(currentPosition, DOWN);
+                } else if (currentPosition[1] < position[1]) {
+                    currentPosition = compareDirection(currentPosition, DOWN, DOWN_RIGHT);
+                } else {
+                    currentPosition = compareDirection(currentPosition, DOWN, DOWN_LEFT);
+                }
+            }
+            distance++;
+        }
+
+        System.out.print("-> [" + currentPosition[0] + "," + currentPosition[1] + "]");
+        System.out.println(" Distance: " + distance);
+
+        if (cost(1) && cost(5 * distance + 10)) {
+            if (territory.region(position).getOwner() == null) {
+                long positionRegionDeposit = territory.region(position).getDeposit();
+                long deposit = territory.region(cityCenterPosition).getDeposit();
+
+                territory.region(cityCenterPosition).setDeposit(positionRegionDeposit);
+                territory.region(position).setDeposit(deposit);
+
+                this.removeRegion(territory.region(cityCenterPosition));
+                territory.region(cityCenterPosition).setCityCenter(false);
+                territory.region(cityCenterPosition).setOwner(null);
+
+                cityCenterPosition = position;
+                territory.region(cityCenterPosition).setOwner(this);
+                territory.region(cityCenterPosition).setCityCenter(true);
+                this.addRegion(territory.region(cityCenterPosition));
+            } else {
+                System.out.println("Region have the owner.");
             }
         }
-        return 0;
+
+        this.done();
     }
+
+    private long[] compareDirection(long[] currentPosition, Direction direction1, Direction direction2) {
+        long[] nextPositionDirection1 = nextPosition(currentPosition, direction1);
+        long[] nextPositionDirection2 = nextPosition(currentPosition, direction2);
+
+        long distance1 = isWithinBound(nextPositionDirection1) ? Math.abs(position[1] - nextPositionDirection1[1]) + Math.abs(position[0] - nextPositionDirection1[0]) : Integer.MAX_VALUE;
+        long distance2 = isWithinBound(nextPositionDirection2) ? Math.abs(position[1] - nextPositionDirection2[1]) + Math.abs(position[0] - nextPositionDirection2[0]) : Integer.MAX_VALUE;
+
+        return distance1 < distance2 ? nextPositionDirection1 : nextPositionDirection2;
+    }
+
+
 
     public int opponent() {
         long[] upDirection = position;
@@ -208,26 +273,44 @@ public class Unit {
         return 0;
     }
 
+    public long nearby(Direction direction) {
+        long[] nearbyOpponent = position;
+        for (int i = 1; i < Configuration.instance().m * Configuration.instance().n; i++) {
+            nearbyOpponent = nextPosition(nearbyOpponent, direction);
+            if (isOpponentRegion(nearbyOpponent)) {
+                long currentdeposit = territory.region(nearbyOpponent).getDeposit();
+                int depositDigits = 0;
+                while (currentdeposit != 0) {
+                    currentdeposit /= 10;
+                    depositDigits++;
+                }
+                return 100L * i + depositDigits;
+            }
+        }
+        return 0;
+    }
 
     public void done() {
         System.out.println(this.name + " is done.");
         isPlayerDone = true;
     }
 
-    public boolean pay(long cost) {
+    public boolean cost(long cost) {
+        if (cost < 0) {
+            System.out.println("What cost < 0??");
+            done();
+            return false;
+        }
         if (budget >= cost) {
             budget -= cost;
             return true;
         } else {
-            System.out.println(this.name + " doesn't have enough budget to execute this command.");
+            System.out.println(this.name + " budget to low .");
             done();
             return false;
         }
     }
 
-    public boolean isLose() {
-        return isLose;
-    }
 
     private boolean isWithinBound(long[] position) {
         boolean rowInRange = position[0] >= 0 && position[0] < territory.row();
@@ -255,11 +338,26 @@ public class Unit {
         ownedRegions.add(r);
     }
 
-    public void printInfo() {
+    public void printUnitData() {
         String message = String.format("Unit: %s | Budget: %d | Number of regions owned: %d", this.name, this.budget, ownedRegions.size());
         String positionMessage = String.format("Position: [%d, %d]", position[0], position[1]);
         System.out.println(message);
         System.out.println(positionMessage);
+    }
+
+    public boolean isLose() {
+        if (isLose) {
+            return true;
+        } else if (territory.region(cityCenterPosition).getDeposit() == 0 || this.budget == 0) {
+            for (Region region : ownedRegions) {
+                region.setOwner(null);
+                region.setCityCenter(false);
+            }
+            ownedRegions.clear();
+            isLose = true;
+            return true;
+        } else
+            return false;
     }
 
     public long[] getPosition() {
@@ -267,8 +365,8 @@ public class Unit {
         return Position;
     }
 
-    public long[] getCityPosition() {
-        long[] cityPosition = this.cityPosition;
+    public long[] getCityCenterPosition() {
+        long[] cityPosition = this.cityCenterPosition;
         return cityPosition;
     }
 

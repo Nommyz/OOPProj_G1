@@ -21,7 +21,7 @@ public class TestMove {
 
     @Test
     void MoveUpTest(){
-        player.printInfo();
+        player.printUnitData();
         for(int i = 0 ; i < 20 ; i++){
             player.move(Direction.UP);
         }
@@ -30,7 +30,7 @@ public class TestMove {
 
     @Test
     void MoveDownTest(){
-        player.printInfo();
+        player.printUnitData();
         for(int i = 0 ; i < 20 ; i++){
             player.move(Direction.DOWN);
         }
@@ -39,7 +39,7 @@ public class TestMove {
 
     @Test
     void MoveUprightTest(){
-        player.printInfo();
+        player.printUnitData();
         for(int i = 0 ; i < 20 ; i++){
             player.move(Direction.UP_RIGHT);
         }
@@ -47,7 +47,7 @@ public class TestMove {
 
     @Test
     void MoveUpLeftTest(){
-        player.printInfo();
+        player.printUnitData();
         for(int i = 0 ; i < 20 ; i++){
             player.move(Direction.UP_LEFT);
         }
@@ -55,14 +55,14 @@ public class TestMove {
 
     @Test
     void MoveDownLeftTest(){
-        player.printInfo();
+        player.printUnitData();
         for(int i = 0 ; i < 20 ; i++){
             player.move(Direction.DOWN_LEFT);
         }
     }
     @Test
     void MoveDownRightTest(){
-        player.printInfo();
+        player.printUnitData();
         for(int i = 0 ; i < 20 ; i++){
             player.move(Direction.DOWN_RIGHT);
         }
@@ -70,7 +70,7 @@ public class TestMove {
 
     @Test
     void RandomMove(){
-        player.printInfo();
+        player.printUnitData();
         for(int i = 0 ; i < 20 ; i++){
             player.randomMove();
         }
@@ -78,7 +78,7 @@ public class TestMove {
     @Test
     void NotEnoughBudgetToMove(){
         Unit player = new Unit("p",territory,8,8,0);
-        player.printInfo();
+        player.printUnitData();
         player.move(Direction.UP);
     }
 
