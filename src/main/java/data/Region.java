@@ -83,10 +83,10 @@ public class Region {
     }
 
     public void printInfo() {
-        System.out.print("(" + rowPosition + "," + columnPosition + ")");
+        System.out.print("[" + rowPosition + "," + columnPosition + "]");
         System.out.print(" Deposit : " + this.deposit);
-        System.out.print(" Owner : " + this.owner);
-        System.out.print(" Centercity : " + (isCenterCity ? this.owner : "no"));
+        System.out.print(" Owner : " + (this.owner != null ? this.owner.getName() : "no"));
+        System.out.print(" Centercity : " + (isCenterCity ? this.owner.getName() : "no"));
         System.out.println(" ");
     }
 

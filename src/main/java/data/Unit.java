@@ -175,20 +175,34 @@ public class Unit {
         }
         return 0;
     }
+
     public int opponent() {
-        Direction[] directions = {UP, DOWN, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
-        int maxDistance = 6;
-        for (int i = 1; i <= maxDistance; i++) {
-            for (Direction direction : directions) {
-                long[] nextPos = searchPosition(i,position, direction);
-                if (isWithinBound(nextPos) && territory.region(nextPos).getOwner() != this &&  isOpponentRegion(nextPos)) {
-                    if (direction.equals(UP)) return i * 10 + 1;
-                    if (direction.equals(UP_RIGHT)) return i * 10 + 2;
-                    if (direction.equals(DOWN_RIGHT)) return i * 10 + 3;
-                    if (direction.equals(DOWN)) return i * 10 + 4;
-                    if (direction.equals(DOWN_LEFT)) return i * 10 + 5;
-                    if (direction.equals(UP_LEFT)) return i * 10 + 6;
-                }
+        long[] upDirection = position;
+        long[] downDirection = position;
+        long[] upleftDirection = position;
+        long[] uprightDirection = position;
+        long[] downleftDirection = position;
+        long[] downrightDirection = position;
+        if (territory.region(position).getOwner() == this) {
+            for (int i = 1; i <= 6; i++) {
+                upDirection = nextPosition(upDirection, UP);
+                if (isOpponentRegion(upDirection))
+                    return i * 10 + 1;
+                downDirection = nextPosition(downDirection, DOWN);
+                if (isOpponentRegion(downDirection))
+                    return i * 10 + 4;
+                upleftDirection = nextPosition(upleftDirection, UP_LEFT);
+                if (isOpponentRegion(upleftDirection))
+                    return i * 10 + 6;
+                uprightDirection = nextPosition(uprightDirection, UP_RIGHT);
+                if (isOpponentRegion(uprightDirection))
+                    return i * 10 + 2;
+                downleftDirection = nextPosition(downleftDirection, DOWN_LEFT);
+                if (isOpponentRegion(downleftDirection))
+                    return i * 10 + 5;
+                downrightDirection = nextPosition(downrightDirection, DOWN_RIGHT);
+                if (isOpponentRegion(downrightDirection))
+                    return i * 10 + 3;
             }
         }
         return 0;
@@ -242,8 +256,8 @@ public class Unit {
     }
 
     public void printInfo() {
-        String message = String.format("Name: %s | Budget: %d | Number of regions owned: %d", this.name, this.budget, ownedRegions.size());
-        String positionMessage = String.format("Position: (%d, %d)", position[0], position[1]);
+        String message = String.format("Unit: %s | Budget: %d | Number of regions owned: %d", this.name, this.budget, ownedRegions.size());
+        String positionMessage = String.format("Position: [%d, %d]", position[0], position[1]);
         System.out.println(message);
         System.out.println(positionMessage);
     }
@@ -266,12 +280,17 @@ public class Unit {
         isPlayerDone = false;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public Set<Region> getOwnedRegions() {
         return ownedRegions;
     }
+
     public long[] nextPosition(long[] currentPosition, Direction direction) {
         long[] nextPosition = currentPosition.clone();
-        switch(direction) {
+        switch (direction) {
             case UP:
                 nextPosition[0]--;
                 break;
@@ -292,38 +311,6 @@ public class Unit {
                 break;
             case DOWN_LEFT:
                 nextPosition[0] += currentPosition[1] % 2 != 0 ? 0 : 1;
-                nextPosition[1]--;
-                break;
-            default:
-                break;
-        }
-        return nextPosition;
-    }
-    // need to fix
-    public long[] searchPosition(int distance,long[] currentPosition, Direction direction) {
-        long[] nextPosition = Arrays.copyOf(currentPosition, 2);
-
-        switch(direction) {
-            case UP:
-                nextPosition[0]-= distance;
-                break;
-            case DOWN:
-                nextPosition[0]+= distance;
-                break;
-            case UP_RIGHT:
-                nextPosition[0] -= currentPosition[1] % 2 == 0 ? 0 : distance;
-                nextPosition[1]++;
-                break;
-            case UP_LEFT:
-                nextPosition[0] -= currentPosition[1] % 2 == 0 ? 0 : distance;
-                nextPosition[1]--;
-                break;
-            case DOWN_RIGHT:
-                nextPosition[0] += currentPosition[1] % 2 != 0 ? 0 : distance;
-                nextPosition[1]++;
-                break;
-            case DOWN_LEFT:
-                nextPosition[0] += currentPosition[1] % 2 != 0 ? 0 : distance;
                 nextPosition[1]--;
                 break;
             default:
