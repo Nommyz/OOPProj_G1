@@ -8,6 +8,13 @@ public class Territory {
     private final int n;
     private final List<Region> regions; // use list to store fucking region
 
+    public int row() {
+        return m;
+    }
+
+    public int column() {
+        return n;
+    }
     public Territory() {
         this.m = Configuration.instance().m;
         this.n = Configuration.instance().n;
@@ -36,11 +43,5 @@ public class Territory {
         }
     }
 
-    public int row() {
-        return m;
-    }
 
-    public int column() {
-        return n;
-    }
 }

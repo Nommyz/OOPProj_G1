@@ -11,7 +11,7 @@ public class TestInvest {
     void InvestRegion() {
         Territory territory = new Territory();
 
-        Unit test1 = new Unit("test1", territory, 4, 4, 1000);
+        Unit test1 = new Unit("test1", territory, 5, 5, 1000);
         test1.printUnitData();
         test1.move(Direction.UP_RIGHT);
 

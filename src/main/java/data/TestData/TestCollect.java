@@ -10,7 +10,7 @@ public class TestCollect {
     void collectRegion(){
         Territory territory = new Territory();
 
-        Unit test1 = new Unit("test1",territory,4,4,1000);
+        Unit test1 = new Unit("test1",territory,5,5,1000);
         test1.move(Direction.DOWN);
         test1.invest(500);
         test1.printUnitData();

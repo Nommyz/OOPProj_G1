@@ -24,7 +24,7 @@ public class Unit {
         ThreadLocalRandom rand = ThreadLocalRandom.current();
         long spawnRow = rand.nextLong(territory.row());
         long spawnCol = rand.nextLong(territory.column());
-        while (territory.region(new long[]{spawnRow , spawnCol}).getOwner() != null) {
+        while (territory.region(new long[]{spawnRow, spawnCol}).getOwner() != null) {
             spawnRow = rand.nextLong(territory.row());
             spawnCol = rand.nextLong(territory.column());
         }
@@ -54,14 +54,40 @@ public class Unit {
         this.budget = budget;
     }
 
+    public long[] getPosition() {
+        long[] Position = this.position;
+        return Position;
+    }
+
+    public long[] getCityCenterPosition() {
+        long[] cityPosition = this.cityCenterPosition;
+        return cityPosition;
+    }
+
+    public void lose() {
+        isLose = true;
+    }
+
+    public void newTurn() {
+        isPlayerDone = false;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Set<Region> getOwnedRegions() {
+        return ownedRegions;
+    }
+
     public void move(Direction direction) {
         if (isPlayerDone || !cost(1)) {
             return;
         }
-        long[] nextPosition = nextPosition(position, direction);
-        if (isWithinBound(nextPosition)) {
-            position[0] = nextPosition[0];
-            position[1] = nextPosition[1];
+        long[] toNextPosition = checkNextPosition(position, direction);
+        if (isWithinBound(toNextPosition)) {
+            position[0] = toNextPosition[0];
+            position[1] = toNextPosition[1];
         }
         this.printUnitData();
     }
@@ -75,6 +101,37 @@ public class Unit {
         Collections.shuffle(directions);
 
         move(directions.get(0));
+    }
+
+    public long[] checkNextPosition(long[] currentPosition, Direction direction) {
+        long[] nextPosition = currentPosition.clone();
+        switch (direction) {
+            case UP:
+                nextPosition[0]--;
+                break;
+            case DOWN:
+                nextPosition[0]++;
+                break;
+            case UP_RIGHT:
+                nextPosition[0] -= currentPosition[1] % 2 == 0 ? 0 : 1;
+                nextPosition[1]++;
+                break;
+            case UP_LEFT:
+                nextPosition[0] -= currentPosition[1] % 2 == 0 ? 0 : 1;
+                nextPosition[1]--;
+                break;
+            case DOWN_RIGHT:
+                nextPosition[0] += currentPosition[1] % 2 != 0 ? 0 : 1;
+                nextPosition[1]++;
+                break;
+            case DOWN_LEFT:
+                nextPosition[0] += currentPosition[1] % 2 != 0 ? 0 : 1;
+                nextPosition[1]--;
+                break;
+            default:
+                break;
+        }
+        return nextPosition;
     }
 
     public void invest(long amount) {
@@ -140,7 +197,7 @@ public class Unit {
             return;
         }
 
-        long[] shootDirection = nextPosition(position, direction);
+        long[] shootDirection = checkNextPosition(position, direction);
         if (!isWithinBound(shootDirection)) {
             return;
         }
@@ -164,8 +221,26 @@ public class Unit {
 
         done();
     }
+    public boolean isLose() {
+        if (isLose) {
+            return true;
+        }
 
+        boolean noDeposit = territory.region(cityCenterPosition).getDeposit() == 0;
+        boolean noBudget = this.budget == 0;
 
+        if (noDeposit || noBudget) {
+            for (Region region : ownedRegions) {
+                region.setOwner(null);
+                region.setCityCenter(false);
+            }
+            ownedRegions.clear();
+            isLose = true;
+            return true;
+        } else {
+            return false;
+        }
+    }
     public void relocate() {
         if (isPlayerDone || isLose()) {
             return;
@@ -184,7 +259,7 @@ public class Unit {
                         : compareDirection(currentPosition, UP_LEFT, DOWN_LEFT);
             } else if (currentPosition[0] > position[0]) {
                 if (currentPosition[1] == position[1]) {
-                    currentPosition = nextPosition(currentPosition, UP);
+                    currentPosition = checkNextPosition(currentPosition, UP);
                 } else if (currentPosition[1] < position[1]) {
                     currentPosition = compareDirection(currentPosition, UP, UP_RIGHT);
                 } else {
@@ -192,7 +267,7 @@ public class Unit {
                 }
             } else {
                 if (currentPosition[1] == position[1]) {
-                    currentPosition = nextPosition(currentPosition, DOWN);
+                    currentPosition = checkNextPosition(currentPosition, DOWN);
                 } else if (currentPosition[1] < position[1]) {
                     currentPosition = compareDirection(currentPosition, DOWN, DOWN_RIGHT);
                 } else {
@@ -230,16 +305,14 @@ public class Unit {
     }
 
     private long[] compareDirection(long[] currentPosition, Direction direction1, Direction direction2) {
-        long[] nextPositionDirection1 = nextPosition(currentPosition, direction1);
-        long[] nextPositionDirection2 = nextPosition(currentPosition, direction2);
+        long[] nextPositionDirection1 = checkNextPosition(currentPosition, direction1);
+        long[] nextPositionDirection2 = checkNextPosition(currentPosition, direction2);
 
         long distance1 = isWithinBound(nextPositionDirection1) ? Math.abs(position[1] - nextPositionDirection1[1]) + Math.abs(position[0] - nextPositionDirection1[0]) : Integer.MAX_VALUE;
         long distance2 = isWithinBound(nextPositionDirection2) ? Math.abs(position[1] - nextPositionDirection2[1]) + Math.abs(position[0] - nextPositionDirection2[0]) : Integer.MAX_VALUE;
 
         return distance1 < distance2 ? nextPositionDirection1 : nextPositionDirection2;
     }
-
-
 
     public int opponent() {
         long[] upDirection = position;
@@ -250,22 +323,22 @@ public class Unit {
         long[] downrightDirection = position;
         if (territory.region(position).getOwner() == this) {
             for (int i = 1; i <= 6; i++) {
-                upDirection = nextPosition(upDirection, UP);
+                upDirection = checkNextPosition(upDirection, UP);
                 if (isOpponentRegion(upDirection))
                     return i * 10 + 1;
-                downDirection = nextPosition(downDirection, DOWN);
+                downDirection = checkNextPosition(downDirection, DOWN);
                 if (isOpponentRegion(downDirection))
                     return i * 10 + 4;
-                upleftDirection = nextPosition(upleftDirection, UP_LEFT);
+                upleftDirection = checkNextPosition(upleftDirection, UP_LEFT);
                 if (isOpponentRegion(upleftDirection))
                     return i * 10 + 6;
-                uprightDirection = nextPosition(uprightDirection, UP_RIGHT);
+                uprightDirection = checkNextPosition(uprightDirection, UP_RIGHT);
                 if (isOpponentRegion(uprightDirection))
                     return i * 10 + 2;
-                downleftDirection = nextPosition(downleftDirection, DOWN_LEFT);
+                downleftDirection = checkNextPosition(downleftDirection, DOWN_LEFT);
                 if (isOpponentRegion(downleftDirection))
                     return i * 10 + 5;
-                downrightDirection = nextPosition(downrightDirection, DOWN_RIGHT);
+                downrightDirection = checkNextPosition(downrightDirection, DOWN_RIGHT);
                 if (isOpponentRegion(downrightDirection))
                     return i * 10 + 3;
             }
@@ -276,7 +349,7 @@ public class Unit {
     public long nearby(Direction direction) {
         long[] nearbyOpponent = position;
         for (int i = 1; i < Configuration.instance().m * Configuration.instance().n; i++) {
-            nearbyOpponent = nextPosition(nearbyOpponent, direction);
+            nearbyOpponent = checkNextPosition(nearbyOpponent, direction);
             if (isOpponentRegion(nearbyOpponent)) {
                 long currentdeposit = territory.region(nearbyOpponent).getDeposit();
                 int depositDigits = 0;
@@ -305,7 +378,7 @@ public class Unit {
             budget -= cost;
             return true;
         } else {
-            System.out.println(this.name + " budget to low .");
+            System.out.println(this.name + " budget not enough.");
             done();
             return false;
         }
@@ -344,77 +417,4 @@ public class Unit {
         System.out.println(message);
         System.out.println(positionMessage);
     }
-
-    public boolean isLose() {
-        if (isLose) {
-            return true;
-        } else if (territory.region(cityCenterPosition).getDeposit() == 0 || this.budget == 0) {
-            for (Region region : ownedRegions) {
-                region.setOwner(null);
-                region.setCityCenter(false);
-            }
-            ownedRegions.clear();
-            isLose = true;
-            return true;
-        } else
-            return false;
-    }
-
-    public long[] getPosition() {
-        long[] Position = this.position;
-        return Position;
-    }
-
-    public long[] getCityCenterPosition() {
-        long[] cityPosition = this.cityCenterPosition;
-        return cityPosition;
-    }
-
-    public void lose() {
-        isLose = true;
-    }
-
-    public void newTurn() {
-        isPlayerDone = false;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Set<Region> getOwnedRegions() {
-        return ownedRegions;
-    }
-
-    public long[] nextPosition(long[] currentPosition, Direction direction) {
-        long[] nextPosition = currentPosition.clone();
-        switch (direction) {
-            case UP:
-                nextPosition[0]--;
-                break;
-            case DOWN:
-                nextPosition[0]++;
-                break;
-            case UP_RIGHT:
-                nextPosition[0] -= currentPosition[1] % 2 == 0 ? 0 : 1;
-                nextPosition[1]++;
-                break;
-            case UP_LEFT:
-                nextPosition[0] -= currentPosition[1] % 2 == 0 ? 0 : 1;
-                nextPosition[1]--;
-                break;
-            case DOWN_RIGHT:
-                nextPosition[0] += currentPosition[1] % 2 != 0 ? 0 : 1;
-                nextPosition[1]++;
-                break;
-            case DOWN_LEFT:
-                nextPosition[0] += currentPosition[1] % 2 != 0 ? 0 : 1;
-                nextPosition[1]--;
-                break;
-            default:
-                break;
-        }
-        return nextPosition;
-    }
-
 }

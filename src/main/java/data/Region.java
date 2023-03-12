@@ -31,6 +31,23 @@ public class Region {
         this.isCenterCity = isCenterCity;
     }
 
+    public long getDeposit() {
+        return this.deposit;
+    }
+
+    public Unit getOwner() {
+        return this.owner;
+    }
+
+    public double getInterestRate() {
+        return this.interestRate;
+    }
+
+    public boolean isCenterCity() {
+        return this.isCenterCity;
+    }
+
+
     public void updateInterestRate(int turnCount) {
         if (turnCount == 1) {
             this.interestRate = Configuration.instance().interest_pct;
@@ -89,20 +106,5 @@ public class Region {
         System.out.println(" ");
     }
 
-    public long getDeposit() {
-        return this.deposit;
-    }
-
-    public Unit getOwner() {
-        return this.owner;
-    }
-
-    public double getInterestRate() {
-        return this.interestRate;
-    }
-
-    public boolean isCenterCity() {
-        return this.isCenterCity;
-    }
 
 }

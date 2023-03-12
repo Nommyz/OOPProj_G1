@@ -8,8 +8,7 @@ import org.testng.annotations.Test;
 
 public class TestMove {
     Territory territory = new Territory();
-    Unit player = new Unit("P1",territory,3,3,1000);
-    Unit player2 = new Unit("Player2",territory);
+    Unit player = new Unit("P1",territory,5,5,1000);
 
     public void delay(){
         try {
@@ -77,9 +76,9 @@ public class TestMove {
     }
     @Test
     void NotEnoughBudgetToMove(){
-        Unit player = new Unit("p",territory,8,8,0);
+        Unit player = new Unit("Job",territory,5,5,0);
         player.printUnitData();
-        player.move(Direction.UP);
+        player.move(Direction.DOWN);
     }
 
 }

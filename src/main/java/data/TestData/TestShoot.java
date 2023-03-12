@@ -16,4 +16,5 @@ public class TestShoot {
         p1.printUnitData();
         territory.region(p1.getCityCenterPosition()).printRegionData();
     }
+
 }
