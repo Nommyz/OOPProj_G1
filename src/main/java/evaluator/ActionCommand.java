@@ -43,7 +43,7 @@ public class ActionCommand implements Statement {
             case "invest" ->  crew.invest(expression.evaluate());
             case "collect" -> crew.collect(expression.evaluate());
             case "done" -> crew.done();
-            //case "relocate" -> crew.relocate();
+            case "relocate" -> crew.relocate();
             default -> throw new SyntaxError("Error");
         }
         return 0;
