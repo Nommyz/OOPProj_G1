@@ -81,7 +81,7 @@ public class Unit {
     }
 
     public void move(Direction direction) {
-        if (isPlayerDone || !cost(1)) {
+        if (isPlayerDone || !cost(1) || isLose()) {
             return;
         }
         long[] toNextPosition = checkNextPosition(position, direction);
@@ -93,7 +93,7 @@ public class Unit {
     }
 
     public void randomMove() {
-        if (isPlayerDone) {
+        if (isPlayerDone || isLose()) {
             return;
         }
 
@@ -135,7 +135,7 @@ public class Unit {
     }
 
     public void invest(long amount) {
-        if (isPlayerDone) {
+        if (isPlayerDone || isLose()) {
             return;
         }
 
@@ -162,7 +162,7 @@ public class Unit {
 
 
     public void collect(long amount) {
-        if (isPlayerDone) {
+        if (isPlayerDone || isLose()) {
             return;
         }
 
@@ -185,7 +185,7 @@ public class Unit {
     }
 
     public void shoot(Direction direction, long amount) {
-        if (isPlayerDone) {
+        if (isPlayerDone || isLose()) {
             return;
         }
 
@@ -209,15 +209,15 @@ public class Unit {
         }
 
         region.gotShot(amount);
-        if (region.getDeposit() == 0 && region.isCenterCity()) {
-            Unit owner = region.getOwner();
-            owner.lose();
-            for (Region ownedRegion : owner.getOwnedRegions()) {
-                ownedRegion.setOwner(null);
-                ownedRegion.setCityCenter(false);
-            }
-            owner.getOwnedRegions().clear();
-        }
+//        if (region.getDeposit() == 0 && region.isCenterCity()) {
+//            Unit owner = region.getOwner();
+//            owner.lose();
+//            for (Region ownedRegion : owner.getOwnedRegions()) {
+//                ownedRegion.setOwner(null);
+//                ownedRegion.setCityCenter(false);
+//            }
+//            owner.getOwnedRegions().clear();
+//        }
 
         done();
     }
@@ -255,23 +255,23 @@ public class Unit {
                 || currentPosition[0] != position[0]) {
             if (currentPosition[0] == position[0]) {
                 currentPosition = currentPosition[1] < position[1]
-                        ? compareDirection(currentPosition, UP_RIGHT, DOWN_RIGHT)
-                        : compareDirection(currentPosition, UP_LEFT, DOWN_LEFT);
+                        ? chooseDirection(currentPosition, UP_RIGHT, DOWN_RIGHT)
+                        : chooseDirection(currentPosition, UP_LEFT, DOWN_LEFT);
             } else if (currentPosition[0] > position[0]) {
                 if (currentPosition[1] == position[1]) {
                     currentPosition = checkNextPosition(currentPosition, UP);
                 } else if (currentPosition[1] < position[1]) {
-                    currentPosition = compareDirection(currentPosition, UP, UP_RIGHT);
+                    currentPosition = chooseDirection(currentPosition, UP, UP_RIGHT);
                 } else {
-                    currentPosition = compareDirection(currentPosition, UP, UP_LEFT);
+                    currentPosition = chooseDirection(currentPosition, UP, UP_LEFT);
                 }
             } else {
                 if (currentPosition[1] == position[1]) {
                     currentPosition = checkNextPosition(currentPosition, DOWN);
                 } else if (currentPosition[1] < position[1]) {
-                    currentPosition = compareDirection(currentPosition, DOWN, DOWN_RIGHT);
+                    currentPosition = chooseDirection(currentPosition, DOWN, DOWN_RIGHT);
                 } else {
-                    currentPosition = compareDirection(currentPosition, DOWN, DOWN_LEFT);
+                    currentPosition = chooseDirection(currentPosition, DOWN, DOWN_LEFT);
                 }
             }
             distance++;
@@ -304,7 +304,7 @@ public class Unit {
         this.done();
     }
 
-    private long[] compareDirection(long[] currentPosition, Direction direction1, Direction direction2) {
+    private long[] chooseDirection(long[] currentPosition, Direction direction1, Direction direction2) {
         long[] nextPositionDirection1 = checkNextPosition(currentPosition, direction1);
         long[] nextPositionDirection2 = checkNextPosition(currentPosition, direction2);
 
