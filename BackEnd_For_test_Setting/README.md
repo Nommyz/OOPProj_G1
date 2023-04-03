@@ -1,1 +1,1 @@
-Backend for test link Front-end and Back-end
+The backend used to test the connection between the backend and frontend.
