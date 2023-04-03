@@ -1,0 +1,47 @@
+.RB {
+  width: 200px;
+  height: 100vh;
+  border: none;
+  /*border-radius: 10px;*/
+  background-image: linear-gradient(#1f1e2be0, #26263394);
+  display: flex;
+  flex-direction: column;
+  /*justify-content: center;*/
+  align-items: center;
+}
+
+.RBCube {
+  margin-top: 20px;
+  width: 160px;
+  height: 160px;
+  border: none;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  /*justify-content: center;*/
+  align-items: center;
+}
+
+.RBCubeSmallLetter {
+  margin-top: 5px;
+  font-family: "FCSubjectRounded";
+  font-size: 20px;
+  user-select: none;
+}
+
+.RBCubeBigLetter {
+  margin-top: 24px;
+  font-family: "FCHome Bold";
+  font-size: 45px;
+  user-select: none;
+}
+
+.RBCube.timer {
+  background-image: linear-gradient(#f52424, #ec6b44);
+  color: #ffffff;
+}
+
+.RBCube.budget {
+  background-image: linear-gradient(#fcab15, #f7cc57);
+  color: #ffffff;
+}

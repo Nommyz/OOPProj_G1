@@ -1,0 +1,61 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+/*FC Subject Rounded*/
+@font-face {
+  font-family: "FCSubjectRounded";
+  src: url("./fonts/FC\ Subject\ Rounded\ Regular\ [Non-commercial\ use].ttf");
+}
+@font-face {
+  font-family: "FCSubjectRounded Bold";
+  src: url("./fonts/FC\ Subject\ Rounded\ Bold\ [Non-commercial\ use].ttf");
+}
+
+/*FC Iconic*/
+@font-face {
+  font-family: "FCIconic";
+  src: url("./fonts/FC\ Iconic\ Regular.ttf");
+}
+@font-face {
+  font-family: "FCIconic Bold";
+  src: url("./fonts/FC\ Iconic\ Bold.ttf");
+}
+
+/*FC Home*/
+@font-face {
+  font-family: "FCHome";
+  src: url("./fonts/FC\ Home\ Regular\ ver\ 1.01.ttf");
+}
+@font-face {
+  font-family: "FCHome Bold";
+  src: url("./fonts/FC\ Home\ Black\ ver\ 1.01.ttf");
+}
+
+/*FC Friday*/
+@font-face {
+  font-family: "FCFriday";
+  src: url("./fonts/FC\ Friday\ Medium.ttf");
+}
+
+/*Monoid*/
+@font-face {
+  font-family: "Monoid";
+  src: url("./fonts/Monoid-Regular.ttf");
+}
+
+/*Consolas*/
+@font-face {
+  font-family: "Consolas";
+  src: url("./fonts/CONSOLA.TTF");
+}

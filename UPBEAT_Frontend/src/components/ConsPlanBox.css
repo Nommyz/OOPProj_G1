@@ -1,0 +1,172 @@
+.ConsPlanBox {
+  width: 600px;
+  height: 900px;
+  border: 1px;
+  border-style: solid;
+  /*border-color: #414141;*/
+  border-color: #7c7c7c;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.ConsPlanBox.current {
+  background-color: #ebebeb;
+  /*background-color: #414141;*/
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.ConsPlanBox.old {
+  background-color: #e6e6e6;
+  /*background-color: #535353;*/
+  position: absolute;
+  margin-left: -600px;
+}
+
+.Header {
+  width: 600px;
+  height: 40px;
+  border: none;
+  user-select: none;
+  font-family: "FCSubjectRounded Bold";
+  font-size: 18px;
+  color: #f5f5f5;
+}
+
+.Header.current {
+  background-image: linear-gradient(#1ea2df, #3ec3e4);
+  display: flex;
+  align-items: center;
+}
+
+.Header.old {
+  background-image: linear-gradient(#1d9ad4, #31b5d6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.CodeBox {
+  width: 600px;
+  height: 860px;
+  border: none;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.CodeBox.current {
+  background-color: #414141;
+}
+
+.CodeBox.old {
+  background-color: #535353;
+}
+
+.CodeArea {
+  width: 520px;
+  height: 820px;
+  resize: none;
+  border: none;
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-family: "Consolas";
+  font-size: 18px;
+  background-color: #e0e0e000;
+}
+
+.CodeArea.current {
+  /*background-color: #414141;
+  color: #d1d1d1;*/
+  color: #585858;
+}
+
+.CodeArea.old {
+  /*background-color: #535353;
+  color: #cacaca;*/
+  color: #585858;
+}
+
+.Footer {
+  width: 600px;
+  height: 80px;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.EditBtn {
+  width: 75px;
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+  user-select: none;
+  font-family: "FCSubjectRounded Bold";
+  font-size: 15px;
+  color: #e4e4e4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-image: linear-gradient(#187fe0, #40b9e9);
+}
+
+.SaveBtn {
+  width: 75px;
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+  user-select: none;
+  font-family: "FCSubjectRounded Bold";
+  font-size: 15px;
+  color: #e4e4e4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-image: linear-gradient(#38aa15, #7ecc18);
+}
+
+.CancelBtn {
+  width: 75px;
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+  user-select: none;
+  font-family: "FCSubjectRounded Bold";
+  font-size: 15px;
+  color: #e4e4e4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-image: linear-gradient(#b92d2d, #e2513e);
+}
+
+.OldBtn {
+  width: 60px;
+  height: 24px;
+  border: none;
+  border-radius: 12px;
+  user-select: none;
+  font-family: "FCSubjectRounded Bold";
+  font-size: 15px;
+  color: #e4e4e4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.OldBtn.off {
+  /*background-image: linear-gradient(#525252, #6e6e6e);*/
+  background-image: linear-gradient(#356897, #3689af);
+}
+
+.OldBtn.on {
+  background-image: linear-gradient(#aa4747, #c75e58);
+}

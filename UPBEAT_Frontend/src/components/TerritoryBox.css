@@ -1,0 +1,11 @@
+.Container {
+  width: 800px;
+  height: 900px;
+  background-image: linear-gradient(#aaa5bea4, #9895a893);
+  border: 1px;
+  border-style: solid;
+  /*border-color: #636363;*/
+  border-color: #7c7c7c;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}

@@ -1,0 +1,112 @@
+.Home {
+  background-color: #343141;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /*justify-content: center;*/
+  align-items: center;
+}
+
+.HomeHeader {
+  text-align: center;
+  font-family: "FCHome Bold";
+  font-size: 120px;
+  color: #e4e4e4;
+  user-select: none;
+  position: absolute;
+  margin-top: 310px;
+  transition: font-size 0.3s, color 0.5s;
+}
+
+.HomeHeader:hover {
+  font-size: 125px;
+  color: #bab2d6;
+}
+
+.RegisterBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 450px;
+}
+
+.NameInput {
+  width: 220px;
+  height: 50px;
+  border: 1px;
+  border-style: solid;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+  border-color: #aaaaaa;
+  outline: none;
+  text-align: center;
+  font-family: "FCFriday";
+  font-size: 40px;
+  color: #424242;
+  user-select: none;
+}
+
+.GoButton {
+  width: 60px;
+  height: 50px;
+  background-image: linear-gradient(#2384d4, #45aed8);
+  border: 2px;
+  border-style: solid;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  border-color: #4c98ca;
+  text-align: center;
+  font-family: "FCFriday";
+  font-size: 40px;
+  color: #f8f8f8;
+  user-select: none;
+  cursor: pointer;
+}
+
+.GoButton.disable {
+  background-image: linear-gradient(#9c9c9c, #bebebe);
+  border-color: #b9b9b9;
+  cursor: default;
+}
+
+.HomeListBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 120px;
+  font-family: "FCIconic Bold";
+  font-size: 36px;
+  color: #c0b8ca;
+  user-select: none;
+}
+
+.HomeList {
+  width: 600px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 20px;
+  font-family: "FCIconic Bold";
+  font-size: 36px;
+  color: #d2cadb;
+  user-select: none;
+}
+
+.HomeWarningText {
+  position: absolute;
+  margin-top: 520px;
+  font-family: "FCIconic Bold";
+  font-size: 30px;
+  user-select: none;
+}
+
+.HomeWarningText.full {
+  color: #3ad6f1;
+}
+
+.HomeWarningText.exist {
+  color: #f75368;
+}

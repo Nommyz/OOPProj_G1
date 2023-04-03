@@ -1,0 +1,80 @@
+.ConfigPage {
+  background-color: #343141;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.ConfigFrame {
+  width: 700px;
+  height: 700px;
+  border: none;
+  border-radius: 20px;
+  background-image: linear-gradient(#d2cfe4ef, #c6c4ddc0);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.ConfigHeader {
+  font-family: "FCIconic Bold";
+  font-size: 40px;
+  color: #373738;
+  user-select: none;
+}
+
+.ConfigBox {
+  margin-top: 50px;
+  width: 600px;
+  height: 500px;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.ConfigSubbox {
+  margin-left: 30px;
+  width: 300px;
+  height: 500px;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.ConfigOptionBox {
+  width: 250px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "FCIconic Bold";
+  font-size: 30px;
+  color: #373738;
+  user-select: none;
+}
+
+/*.ConfigTitle {
+  font-family: "FCIconic Bold";
+  font-size: 30px;
+  color: #373738;
+  user-select: none;
+}*/
+
+.ConfigInput {
+  width: 130px;
+  height: 30px;
+  border: none;
+  border-radius: 10px;
+  outline-color: #9d9aac;
+  background-color: #edecf1ec;
+  text-align: end;
+  font-family: "FCIconic Bold";
+  font-size: 28px;
+  color: #58585a;
+}
